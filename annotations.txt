@@ -1,0 +1,150 @@
+1.package annotations;
+
+import java.lang.annotation.*;
+@Inherited
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@interface Test{
+		String testCase();
+}
+
+package annotations;
+
+public class Prob1 {
+	@Test(testCase="")
+	public static void main(String[] args) {
+		System.out.println("First problem is done");
+
+	}
+
+}
+
+----------------------------------------------------------------------------
+2.package annotations;
+
+import java.lang.annotation.*;
+
+@Inherited
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Info {
+	int AuthorID() default 0;
+	String Date() default "none";
+	String Time() default "none";
+	int Version()default 0;
+	
+
+}
+
+package annotations;
+@Info(AuthorID =123, Date ="06-Nov-2021", Time ="08:15pm", Version =8)
+public class Employee {
+	String name;
+	String department;
+	public Employee(String name, String department) {
+		super();
+		this.name = name;
+		this.department = department;
+	}
+	
+	public void getEmployeeDetails() {
+		System.out.println("Employee name "+name);
+		System.out.println("Employee Department "+ department);
+	}
+	
+	
+
+}
+
+package annotations;
+import java.lang.annotation.*;
+
+
+
+public class UserLogic {
+
+	public static void main(String[] args) throws Exception{
+		
+		Employee employee = new Employee("Nireekshan","StandUser");
+		employee.getEmployeeDetails();;
+		Class c = employee.getClass();
+		Annotation ann = c.getAnnotation(Info.class);
+		Info e = (Info)ann;
+		System.out.println("***********************************");
+		System.out.println("The data about Info Annotation");
+		System.out.println(e.AuthorID());
+		System.out.println(e.Date());
+		System.out.println(e.Time());
+		System.out.println(e.Version());
+		
+
+	}
+
+}
+
+----------------------------------------------------------------------
+3.package annotations;
+import java.lang.annotation.*;
+
+@Inherited
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+
+public @interface Execute {
+	int sequence() default 0;
+
+}
+
+package annotations;
+
+public class MyClass {
+	@Execute(sequence =2)
+	public void myMethod1() {
+		System.out.println("From method1");
+	}
+	@Execute(sequence =1)
+	public void myMethod2() {
+		System.out.println("from method2");
+	}
+	@Execute(sequence =3)
+	public void myMethod3() {
+		System.out.println("From method3");
+	}
+
+
+
+}
+
+package annotations;
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+
+public class Question3 {
+
+	public static void main(String[] args) throws Exception {
+		MyClass myclass = new MyClass();
+		myclass.myMethod1();
+		myclass.myMethod3();
+		myclass.myMethod2();
+		Class c = myclass.getClass();
+		Method m = c.getDeclaredMethod("myMethod1");
+		Method m1 = c.getDeclaredMethod("myMethod2");
+		Method m2 = c.getDeclaredMethod("myMethod3");
+		Annotation ann = m.getAnnotation(Execute.class);
+		Annotation ann1 = m1.getAnnotation(Execute.class);
+		Annotation ann2= m2.getAnnotation(Execute.class);
+		Execute e = (Execute)ann;
+		Execute e1 = (Execute)ann1;
+		Execute e2 = (Execute)ann2;
+		System.out.println(e.sequence());
+		System.out.println(e1.sequence());
+		System.out.println(e2.sequence());
+		
+		
+
+	}
+
+}
